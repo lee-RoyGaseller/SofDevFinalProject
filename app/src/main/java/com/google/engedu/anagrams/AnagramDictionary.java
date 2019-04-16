@@ -15,6 +15,8 @@
 
 package com.google.engedu.anagrams;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -28,6 +30,8 @@ import java.util.Random;
 import java.util.Set;
 
 public class AnagramDictionary {
+
+    private static final String APP_TAG = "AnaDict";
 
     private static final int MIN_NUM_ANAGRAMS = 5;
     private static final int DEFAULT_WORD_LENGTH = 3;
@@ -43,6 +47,7 @@ public class AnagramDictionary {
         while((line = in.readLine()) != null) {
             String word = line.trim();
             wordList.add(word);
+            wordSet.add(word);
             String keyString = sortLetters(word);
             if (lettersToWord.containsKey(keyString)) {
                 lettersToWord.get(keyString).add(word);
@@ -55,7 +60,7 @@ public class AnagramDictionary {
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+        return (wordSet.contains(word) && !word.contains(base));
     }
 
     public List<String> getAnagrams(String targetWord) {
