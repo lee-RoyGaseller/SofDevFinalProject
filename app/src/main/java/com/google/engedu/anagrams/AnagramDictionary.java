@@ -84,6 +84,15 @@ public class AnagramDictionary {
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
+            if (lettersToWord.containsKey(sortLetters(word + alphabet))) {
+                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(word + alphabet));
+                for (String anagram : listAnagrams) {
+                    if (isGoodWord(word, anagram)) { result.add(anagram); }
+                }
+
+            }
+        }
         return result;
     }
 
