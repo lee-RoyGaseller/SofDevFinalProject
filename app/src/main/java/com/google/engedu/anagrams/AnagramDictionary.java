@@ -97,6 +97,13 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        int length = wordList.size();
+        String word = wordList.get(random.nextInt(length));
+        int numAnagrams = lettersToWord.get(sortLetters(word)).size();
+        while (numAnagrams < MIN_NUM_ANAGRAMS) {
+            word = wordList.get(random.nextInt(length));
+            numAnagrams = lettersToWord.get(sortLetters(word)).size();
+        }
+        return word;
     }
 }
