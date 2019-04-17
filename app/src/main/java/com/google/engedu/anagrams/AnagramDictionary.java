@@ -15,43 +15,95 @@
 
 package com.google.engedu.anagrams;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public class AnagramDictionary {
+
+    private static final String APP_TAG = "AnaDict";
 
     private static final int MIN_NUM_ANAGRAMS = 5;
     private static final int DEFAULT_WORD_LENGTH = 3;
     private static final int MAX_WORD_LENGTH = 7;
     private Random random = new Random();
+    private ArrayList<String> wordList = new ArrayList<>();
+    private Set<String> wordSet = new HashSet<>();
+    private Map<String, ArrayList<String >> lettersToWord = new HashMap<>();
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
         String line;
         while((line = in.readLine()) != null) {
             String word = line.trim();
+            wordList.add(word);
+            wordSet.add(word);
+            String keyString = sortLetters(word);
+            if (lettersToWord.containsKey(keyString)) {
+                lettersToWord.get(keyString).add(word);
+            } else {
+                ArrayList<String> aList = new ArrayList<>();
+                aList.add(word);
+                lettersToWord.put(keyString, aList);
+            }
         }
     }
 
     public boolean isGoodWord(String word, String base) {
-        return true;
+        return (wordSet.contains(word) && !word.contains(base));
     }
 
     public List<String> getAnagrams(String targetWord) {
-        ArrayList<String> result = new ArrayList<String>();
+        java.lang.String key = sortLetters(targetWord);
+        int keyLen = key.length();
+        ArrayList<java.lang.String> result = new ArrayList<java.lang.String>();
+        for (java.lang.String word : wordList) {
+            if (word.length() == keyLen) {
+                if (key.equals(sortLetters(word))) { result.add(word); }
+            }
+        }
         return result;
+    }
+
+    public String sortLetters(String word) {
+        // takes a string, turns it into a Character array, sorts, and return the array as a string.
+        char temp[] = word.toCharArray();
+        Arrays.sort(temp);
+        return new String(temp);
     }
 
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
+        for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
+            if (lettersToWord.containsKey(sortLetters(word + alphabet))) {
+                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(word + alphabet));
+                for (String anagram : listAnagrams) {
+                    if (isGoodWord(word, anagram)) { result.add(anagram); }
+                }
+
+            }
+        }
         return result;
     }
 
     public String pickGoodStarterWord() {
-        return "stop";
+        int length = wordList.size();
+        String word = wordList.get(random.nextInt(length));
+        int numAnagrams = lettersToWord.get(sortLetters(word)).size();
+        while (numAnagrams < MIN_NUM_ANAGRAMS) {
+            word = wordList.get(random.nextInt(length));
+            numAnagrams = lettersToWord.get(sortLetters(word)).size();
+        }
+        return word;
     }
 }

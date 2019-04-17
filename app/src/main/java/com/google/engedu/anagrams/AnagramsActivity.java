@@ -62,7 +62,7 @@ public class AnagramsActivity extends AppCompatActivity {
             toast.show();
         }
         // Set up the EditText box to process the content of the box when the user hits 'enter'
-        final EditText editText = (EditText) findViewById(R.id.editText);
+        final EditText editText = (EditText) findViewById(R .id.editText);
         editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
         editText.setImeOptions(EditorInfo.IME_ACTION_GO);
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -127,7 +127,7 @@ public class AnagramsActivity extends AppCompatActivity {
         TextView resultView = (TextView) findViewById(R.id.resultView);
         if (currentWord == null) {
             currentWord = dictionary.pickGoodStarterWord();
-            anagrams = dictionary.getAnagrams(currentWord);
+            anagrams = dictionary.getAnagramsWithOneMoreLetter(currentWord);
             gameStatus.setText(Html.fromHtml(String.format(START_MESSAGE, currentWord.toUpperCase(), currentWord)));
             fab.setImageResource(android.R.drawable.ic_menu_help);
             fab.hide();
