@@ -34,12 +34,14 @@ public class AnagramDictionary {
     private static final String APP_TAG = "AnaDict";
 
     private static final int MIN_NUM_ANAGRAMS = 5;
-    private static final int DEFAULT_WORD_LENGTH = 3;
+    private static final int DEFAULT_WORD_LENGTH = 4;
     private static final int MAX_WORD_LENGTH = 7;
+    private static int wordLength = DEFAULT_WORD_LENGTH;
     private Random random = new Random();
     private ArrayList<String> wordList = new ArrayList<>();
     private Set<String> wordSet = new HashSet<>();
     private Map<String, ArrayList<String >> lettersToWord = new HashMap<>();
+    private Map<Integer,ArrayList<String>> sizeToWords = new HashMap<>();
 
     public AnagramDictionary(Reader reader) throws IOException {
         BufferedReader in = new BufferedReader(reader);
@@ -49,6 +51,15 @@ public class AnagramDictionary {
             wordList.add(word);
             wordSet.add(word);
             String keyString = sortLetters(word);
+            int length = word.length();
+            if(sizeToWords.containsKey(length)){
+                sizeToWords.get(length).add(word);
+            }
+            else {
+                ArrayList<String> wordsOfThisLength = new ArrayList<>();
+                wordsOfThisLength.add(word);
+                sizeToWords.put(length,wordsOfThisLength);
+            }
             if (lettersToWord.containsKey(keyString)) {
                 lettersToWord.get(keyString).add(word);
             } else {
@@ -97,13 +108,18 @@ public class AnagramDictionary {
     }
 
     public String pickGoodStarterWord() {
-        int length = wordList.size();
-        String word = wordList.get(random.nextInt(length));
+
+        int length = sizeToWords.get(wordLength).size();
+        String word = sizeToWords.get(wordLength).get(random.nextInt(length));
         int numAnagrams = lettersToWord.get(sortLetters(word)).size();
         while (numAnagrams < MIN_NUM_ANAGRAMS) {
-            word = wordList.get(random.nextInt(length));
+            word = sizeToWords.get(wordLength).get(random.nextInt(length));
             numAnagrams = lettersToWord.get(sortLetters(word)).size();
         }
+        if (wordLength!=MAX_WORD_LENGTH){
+            wordLength++;
+        }
+
         return word;
     }
 }
