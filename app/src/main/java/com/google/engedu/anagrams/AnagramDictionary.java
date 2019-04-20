@@ -107,8 +107,22 @@ public class AnagramDictionary {
         return result;
     }
 
-    public String pickGoodStarterWord() {
+    public List<String> getAnagramsWithTwoMoreLetters(String word) {
+        ArrayList<String> result = new ArrayList<String>();
+        for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
+            for (char alphabet2 = 'a'; alphabet2 <= 'z'; alphabet2++)
+            if (lettersToWord.containsKey(sortLetters(word + alphabet+alphabet2))) {
+                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(word + alphabet));
+                for (String anagram : listAnagrams) {
+                    if (isGoodWord(word, anagram)) { result.add(anagram); }
+                }
 
+            }
+        }
+        return result;
+    }
+
+    public String pickGoodStarterWord() {
         int length = sizeToWords.get(wordLength).size();
         String word = sizeToWords.get(wordLength).get(random.nextInt(length));
         int numAnagrams = lettersToWord.get(sortLetters(word)).size();
