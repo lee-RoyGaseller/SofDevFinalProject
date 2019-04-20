@@ -21,7 +21,8 @@
     android:layout_height="match_parent" android:fitsSystemWindows="true"
     tools:context=".AnagramsActivity">
 
-    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
         android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
@@ -32,11 +33,24 @@
 
     <include layout="@layout/content_anagrams" />
 
-    <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_media_play"
-        android:onClick="defaultAction"
+        android:onClick="updateView"
         android:nestedScrollingEnabled="false" />
+
+    <Button
+        android:id="@+id/btnChangeMode"
+        style="@style/TextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Switch Gamemode"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|start"
+        android:onClick="chooseMode"/>
 
 </android.support.design.widget.CoordinatorLayout>

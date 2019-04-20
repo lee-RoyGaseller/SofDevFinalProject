@@ -36,6 +36,7 @@ public class AnagramDictionary {
     private static final int MIN_NUM_ANAGRAMS = 5;
     private static final int DEFAULT_WORD_LENGTH = 4;
     private static final int MAX_WORD_LENGTH = 7;
+    private static boolean OML = true;
     private static int wordLength = DEFAULT_WORD_LENGTH;
     private Random random = new Random();
     private ArrayList<String> wordList = new ArrayList<>();
@@ -96,8 +97,9 @@ public class AnagramDictionary {
     public List<String> getAnagramsWithOneMoreLetter(String word) {
         ArrayList<String> result = new ArrayList<String>();
         for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
-            if (lettersToWord.containsKey(sortLetters(word + alphabet))) {
-                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(word + alphabet));
+            String key = word + alphabet;
+            if (lettersToWord.containsKey(sortLetters(key))) {
+                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(key));
                 for (String anagram : listAnagrams) {
                     if (isGoodWord(word, anagram)) { result.add(anagram); }
                 }
@@ -110,13 +112,14 @@ public class AnagramDictionary {
     public List<String> getAnagramsWithTwoMoreLetters(String word) {
         ArrayList<String> result = new ArrayList<String>();
         for(char alphabet = 'a'; alphabet <= 'z'; alphabet++) {
-            for (char alphabet2 = 'a'; alphabet2 <= 'z'; alphabet2++)
-            if (lettersToWord.containsKey(sortLetters(word + alphabet+alphabet2))) {
-                ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(word + alphabet));
-                for (String anagram : listAnagrams) {
-                    if (isGoodWord(word, anagram)) { result.add(anagram); }
+            for (char alphabet2 = 'a'; alphabet2 <= 'z'; alphabet2++) {
+                String key = word + alphabet + alphabet2;
+                if (lettersToWord.containsKey(sortLetters(key))) {
+                    ArrayList<String> listAnagrams = lettersToWord.get(sortLetters(key));
+                    for (String anagram : listAnagrams) {
+                        if (isGoodWord(word, anagram)) { result.add(anagram); }
+                    }
                 }
-
             }
         }
         return result;
@@ -130,10 +133,19 @@ public class AnagramDictionary {
             word = sizeToWords.get(wordLength).get(random.nextInt(length));
             numAnagrams = lettersToWord.get(sortLetters(word)).size();
         }
-        if (wordLength!=MAX_WORD_LENGTH){
-            wordLength++;
-        }
+
+        //Revert to a short starter word after some time.
+        if ( wordLength!=MAX_WORD_LENGTH ){ wordLength++; }
+        else { wordLength = DEFAULT_WORD_LENGTH; }
 
         return word;
+    }
+
+    public boolean isOML() {
+        return OML;
+    }
+
+    public void changeMode() {
+        OML = !OML;
     }
 }

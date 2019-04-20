@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Anagrams</string>
     <string name="action_settings">Settings</string>
+
+    <string name="one_more_letter">1 More Letter mode</string>
+    <string name="two_more_letters">2 More Letters mode</string>
 </resources>
